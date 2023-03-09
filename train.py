@@ -43,6 +43,6 @@ if __name__ == '__main__':
         loss = train(epoch)
         losses.append(loss)
         t.set_description(str(round(loss.item(), 6)))
-        experiment.log_metric("accuracy", loss, epoch=epoch)
+        experiment.log_metric("loss", loss, epoch=epoch)
 
     torch.save(model, "l3-attn-model.pt")

@@ -11,20 +11,20 @@ class AttnGCN(torch.nn.Module):
         self.norm = BatchNorm1d(66)
         self.conv1 = GATConv(in_channels=66,
                              out_channels=66,
-                             heads=1,
+                             heads=4,
                              add_self_loops=False,
                              edge_dim=1)
-        self.conv2 = GATConv(in_channels=66,
-                             out_channels=66,
-                             heads=1,
-                             add_self_loops=False,
-                             edge_dim=1)
-        self.conv3 = GATConv(in_channels=66,
-                             out_channels=66,
-                             heads=1,
-                             add_self_loops=False,
-                             edge_dim=1)
-        self.fc1 = Linear(66, 66)
+        # self.conv2 = GATConv(in_channels=66,
+        #                      out_channels=66,
+        #                      heads=1,
+        #                      add_self_loops=False,
+        #                      edge_dim=1)
+        # self.conv3 = GATConv(in_channels=66,
+        #                      out_channels=66,
+        #                      heads=1,
+        #                      add_self_loops=False,
+        #                      edge_dim=1)
+        self.fc1 = Linear(264, 66)
         self.fc2 = Linear(66, 66)
         self.fc3 = Linear(66, 66)
         self.fc4 = Linear(66, 66)
@@ -34,10 +34,10 @@ class AttnGCN(torch.nn.Module):
         h = self.norm(h)
         h = self.conv1(h, edge_index, edge_weight)
         h = h.relu()
-        h = self.conv2(h, edge_index, edge_weight)
-        h = h.relu()
-        h = self.conv3(h, edge_index, edge_weight)
-        h = h.relu()
+        # h = self.conv2(h, edge_index, edge_weight)
+        # h = h.relu()
+        # h = self.conv3(h, edge_index, edge_weight)
+        # h = h.relu()
         h = self.fc1(h)
         h = h.relu()
         h = self.fc2(h)
