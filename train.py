@@ -62,4 +62,4 @@ if __name__ == '__main__':
         t.set_description(str(round(loss.item(), 6)))
         experiment.log_metric("loss", loss, epoch=epoch)
 
-    torch.save(model, "l1-head4-attn-model.pt")
+    torch.save(model, "focal-l1-head4-attn-model.pt")
