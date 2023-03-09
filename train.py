@@ -1,9 +1,11 @@
+import comet_ml
+from comet_ml import Experiment
+
 import torch
 
 from mix import AttnGCN
 from mix import MyOwnDataset22Class
 from tqdm import trange
-
 
 def train(epoch):
     model.train()
@@ -16,6 +18,12 @@ def train(epoch):
 
 
 if __name__ == '__main__':
+
+    experiment = Experiment(
+        project_name="genotek",
+        workspace="kenenbek",
+    )
+
     if torch.cuda.is_available():
         device = torch.device('cuda')
     else:
@@ -35,3 +43,4 @@ if __name__ == '__main__':
         loss = train(epoch)
         losses.append(loss)
         t.set_description(str(round(loss.item(), 6)))
+        experiment.log_metric("accuracy", loss, epoch=epoch)
