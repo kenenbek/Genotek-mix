@@ -44,10 +44,10 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    # criterion = torch.nn.CrossEntropyLoss()
-    criterion = FocalLoss(
-        weight=1. / torch.tensor([2815, 1, 635, 620, 403, 432, 573, 353, 109, 100, 107, 625, 183, 55, 19, 20,
-                                  48, 39, 28, 11, 1, 535], dtype=torch.float).to(device))
+    criterion = torch.nn.CrossEntropyLoss()
+    # criterion = FocalLoss(
+    #     weight=1. / torch.tensor([2815, 1, 635, 620, 403, 432, 573, 353, 109, 100, 107, 625, 183, 55, 19, 20,
+    #                               48, 39, 28, 11, 1, 535], dtype=torch.float).to(device))
 
     train_dataset = MyOwnDataset22Class(root="train_data_22_class/")
     train_data = train_dataset.get(0).to(device)
@@ -62,4 +62,4 @@ if __name__ == '__main__':
         t.set_description(str(round(loss.item(), 6)))
         experiment.log_metric("loss", loss, epoch=epoch)
 
-    torch.save(model, "focal-l1-head4-attn-model.pt")
+    torch.save(model, "l3-head4-attn-model.pt")
