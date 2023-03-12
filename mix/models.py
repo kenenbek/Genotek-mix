@@ -99,6 +99,8 @@ class GCN(torch.nn.Module):
         h = h.relu()
         h = self.conv2(h, edge_index, edge_weight)
         h = h.relu()
+        h = self.conv3(h, edge_index, edge_weight)
+        h = h.relu()
         h = self.fc1(h)
         h = h.relu()
         h = self.fc2(h)
