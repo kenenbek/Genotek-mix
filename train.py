@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    t = trange(20000, leave=True)
+    t = trange(5000, leave=True)
     losses = []
     for epoch in t:
         loss = train(epoch)
