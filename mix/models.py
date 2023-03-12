@@ -8,27 +8,27 @@ class AttnGCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         torch.manual_seed(1234)
-        self.norm = BatchNorm1d(66)
-        self.conv1 = GATConv(in_channels=66,
-                             out_channels=66,
-                             heads=2,
-                             add_self_loops=False,
+        self.norm = BatchNorm1d(30)
+        self.conv1 = GATConv(in_channels=30,
+                             out_channels=30,
+                             heads=1,
+                             add_self_loops=True,
                              edge_dim=1)
-        self.conv2 = GATConv(in_channels=132,
-                             out_channels=66,
-                             heads=2,
-                             add_self_loops=False,
+        self.conv2 = GATConv(in_channels=30,
+                             out_channels=30,
+                             heads=1,
+                             add_self_loops=True,
                              edge_dim=1)
-        self.conv3 = GATConv(in_channels=132,
-                             out_channels=66,
-                             heads=2,
-                             add_self_loops=False,
-                             edge_dim=1)
-        self.fc1 = Linear(132, 66)
-        self.fc2 = Linear(66, 66)
-        self.fc3 = Linear(66, 66)
-        self.fc4 = Linear(66, 66)
-        self.fc5 = Linear(66, 22)
+        # self.conv3 = GATConv(in_channels=66,
+        #                      out_channels=66,
+        #                      heads=1,
+        #                      add_self_loops=False,
+        #                      edge_dim=1)
+        self.fc1 = Linear(30, 30)
+        self.fc2 = Linear(30, 30)
+        self.fc3 = Linear(30, 10)
+        self.fc4 = Linear(10, 10)
+        self.fc5 = Linear(10, 10)
 
     def forward(self, h, edge_index, edge_weight):
         h = self.norm(h)
@@ -36,8 +36,8 @@ class AttnGCN(torch.nn.Module):
         h = h.relu()
         h = self.conv2(h, edge_index, edge_weight)
         h = h.relu()
-        h = self.conv3(h, edge_index, edge_weight)
-        h = h.relu()
+        # h = self.conv3(h, edge_index, edge_weight)
+        # h = h.relu()
         h = self.fc1(h)
         h = h.relu()
         h = self.fc2(h)
