@@ -44,9 +44,9 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    # criterion = torch.nn.CrossEntropyLoss()
-    criterion = FocalLoss(
-         weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
+    criterion = torch.nn.CrossEntropyLoss()
+    # criterion = FocalLoss(
+    #    weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
 
     train_dataset = MyOwnDataset10Class(root="train_data_10_class/")
     train_data = train_dataset.get(0).to(device)
