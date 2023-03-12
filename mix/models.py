@@ -79,14 +79,14 @@ class GCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         torch.manual_seed(1234)
-        self.conv1 = GCNConv(30, 120,
+        self.conv1 = GCNConv(30, 30,
                              add_self_loops=True,
                              normalize=True)
-        self.fc1 = Linear(120, 120)
-        self.fc2 = Linear(120, 120)
-        self.fc3 = Linear(120, 120)
-        self.fc4 = Linear(120, 120)
-        self.fc5 = Linear(120, 10)
+        self.fc1 = Linear(30, 30)
+        self.fc2 = Linear(30, 30)
+        self.fc3 = Linear(30, 30)
+        self.fc4 = Linear(30, 30)
+        self.fc5 = Linear(30, 10)
 
     def forward(self, h, edge_index, edge_weight):
         h = self.conv1(h, edge_index, edge_weight)
