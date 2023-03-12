@@ -49,7 +49,7 @@ if __name__ == '__main__':
     #     weight=1. / torch.tensor([2815, 1, 635, 620, 403, 432, 573, 353, 109, 100, 107, 625, 183, 55, 19, 20,
     #                               48, 39, 28, 11, 1, 535], dtype=torch.float).to(device))
 
-    train_dataset = MyOwnDataset22Class(root="train_data_22_class/")
+    train_dataset = MyOwnDataset22Class(root="train_data_10_class/")
     train_data = train_dataset.get(0).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
