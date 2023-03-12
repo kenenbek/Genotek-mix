@@ -94,7 +94,7 @@ class GCN(torch.nn.Module):
     def forward(self, h, edge_index, edge_weight):
         h = self.conv1(h, edge_index, edge_weight)
         h = h.relu()
-        h = self.conv1(h, edge_index, edge_weight)
+        h = self.conv2(h, edge_index, edge_weight)
         h = h.relu()
         h = self.fc1(h)
         h = h.relu()
