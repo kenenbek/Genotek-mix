@@ -43,7 +43,7 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
 
-    model = AttnGCN().to(device)
+    model = GCN().to(device)
     criterion = torch.nn.CrossEntropyLoss()
     # criterion = FocalLoss(
     #     weight=1. / torch.tensor([2815, 1, 635, 620, 403, 432, 573, 353, 109, 100, 107, 625, 183, 55, 19, 20,
