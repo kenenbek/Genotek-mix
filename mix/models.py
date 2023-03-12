@@ -11,12 +11,12 @@ class AttnGCN(torch.nn.Module):
         self.norm = BatchNorm1d(30)
         self.conv1 = GATConv(in_channels=30,
                              out_channels=30,
-                             heads=1,
+                             heads=2,
                              add_self_loops=True,
                              edge_dim=1)
-        self.conv2 = GATConv(in_channels=30,
+        self.conv2 = GATConv(in_channels=60,
                              out_channels=30,
-                             heads=1,
+                             heads=2,
                              add_self_loops=True,
                              edge_dim=1)
         # self.conv3 = GATConv(in_channels=66,
@@ -24,7 +24,7 @@ class AttnGCN(torch.nn.Module):
         #                      heads=1,
         #                      add_self_loops=False,
         #                      edge_dim=1)
-        self.fc1 = Linear(30, 30)
+        self.fc1 = Linear(60, 30)
         self.fc2 = Linear(30, 30)
         self.fc3 = Linear(30, 10)
         self.fc4 = Linear(10, 10)
