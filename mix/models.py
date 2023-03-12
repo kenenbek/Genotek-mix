@@ -11,7 +11,7 @@ class AttnGCN(torch.nn.Module):
         self.norm = BatchNorm1d(30)
         self.conv1 = GATConv(in_channels=30,
                              out_channels=30,
-                             heads=8,
+                             heads=16,
                              concat=False,
                              add_self_loops=True,
                              edge_dim=1)
