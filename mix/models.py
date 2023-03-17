@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 from torch_geometric.nn import GATConv
 from torch.nn import Linear, BatchNorm1d
 from torch_geometric.nn import GCNConv
@@ -76,3 +77,43 @@ class GCN(torch.nn.Module):
         h = h.relu()
         h = self.fc3(h)
         return h
+
+
+class AttnMDN(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        torch.manual_seed(1234)
+        self.norm = BatchNorm1d(30)
+        self.conv1 = GATConv(in_channels=30,
+                             out_channels=30,
+                             heads=2,
+                             add_self_loops=True,
+                             edge_dim=1)
+        self.fc1 = Linear(60, 10)
+        self.fc2 = Linear(10, 10)
+        self.fc3 = Linear(10, 10)
+        self.fc4 = Linear(10, 1)
+        self.fc5 = Linear(10, 1)
+
+    def forward(self, h, edge_index, edge_weight):
+        h = self.norm(h)
+        h = self.conv1(h, edge_index, edge_weight)
+        h = h.relu()
+        h = self.fc1(h)
+        h = h.relu()
+        h = self.fc2(h)
+        h = h.relu()
+        h = self.fc3(h)
+
+        alpha = F.elu(self.fc4(h)) + 1
+        beta = F.elu(self.fc5(h)) + 1
+
+        return alpha, beta
+
+
+def mdn_gamma_loss(out, y):
+    alpha, beta = out
+    # dist = torch.distributions.Gamma(concentration=alpha, rate=beta)
+    dist = torch.distributions.Normal(alpha, beta)
+    loss = -dist.log_prob(y)
+    return torch.mean(loss)
