@@ -3,7 +3,7 @@ from comet_ml import Experiment
 
 import torch
 
-from mix import AttnGCN, GCN
+from mix import AttnGCN, AttnMDN, GCN
 from mix import MyOwnDataset22Class, MyOwnDataset10Class, MyOwnDataset10ClassCont
 from mix import mdn_gamma_loss
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
 
-    model = GCN().to(device)
+    model = AttnMDN().to(device)
     # criterion = torch.nn.CrossEntropyLoss()
     # criterion = FocalLoss(
     #    weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
