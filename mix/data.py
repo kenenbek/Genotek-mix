@@ -341,6 +341,7 @@ class MyOwnDataset10ClassCont(MyOwnDataset):
                 x_data_[id2][ind] += 1
                 ibd_list_[id2][ind].append(ibd_sum)
 
+                print(jw2)
                 ind = int(np.floor(jw2 * 100 / 10))
                 y_labels[id2] = jw2
                 x_data_[id1][ind] += 1
