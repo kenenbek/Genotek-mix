@@ -4,7 +4,7 @@ from comet_ml import Experiment
 import torch
 
 from mix import AttnGCN, GCN
-from mix import MyOwnDataset22Class, MyOwnDataset10Class
+from mix import MyOwnDataset22Class, MyOwnDataset10Class, MyOwnDataset10ClassCont
 from mix import mdn_gamma_loss
 
 from tqdm import trange
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     #    weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
     criterion = mdn_gamma_loss
 
-    train_dataset = MyOwnDataset10Class(root="train_data_10_class_cont/")
+    train_dataset = MyOwnDataset10ClassCont(root="train_data_10_class_cont/")
     train_data = train_dataset.get(0).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
