@@ -82,6 +82,7 @@ class GCN(torch.nn.Module):
         h = self.fc3(h)
         h = h.relu()
         h = self.fc4(h)
+        h = h.squeeze(1)
         return h
 
 
