@@ -16,7 +16,7 @@ class AttnGCN(torch.nn.Module):
                              concat=False,
                              add_self_loops=True,
                              edge_dim=1)
-        self.fc1 = Linear(10, 10)
+        self.fc1 = Linear(30, 10)
         self.fc2 = Linear(10, 10)
         self.fc3 = Linear(10, 10)
 
