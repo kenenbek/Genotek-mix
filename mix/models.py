@@ -19,6 +19,7 @@ class AttnGCN(torch.nn.Module):
         self.fc1 = Linear(30, 10)
         self.fc2 = Linear(10, 10)
         self.fc3 = Linear(10, 10)
+        self.fc4 = Linear(10, 1)
 
     def forward(self, h, edge_index, edge_weight):
         h = self.norm(h)
@@ -29,6 +30,8 @@ class AttnGCN(torch.nn.Module):
         h = self.fc2(h)
         h = h.relu()
         h = self.fc3(h)
+        h = h.relu()
+        h = self.fc4(h)
         return h
 
 
