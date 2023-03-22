@@ -32,7 +32,7 @@ class AttnGCN(torch.nn.Module):
         h = self.fc3(h)
         h = h.relu()
         h = self.fc4(h)
-        h = h.sigmoid()
+        h = h.relu()
         h = h.squeeze(1)
         return h
 
