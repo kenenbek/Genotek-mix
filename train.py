@@ -45,7 +45,7 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
 
-    model = GCN().to(device)
+    model = AttnGCN().to(device)
     # criterion = torch.nn.CrossEntropyLoss()
     criterion = torch.nn.MSELoss()
     # criterion = FocalLoss(
