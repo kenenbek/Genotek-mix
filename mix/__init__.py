@@ -1,2 +1,2 @@
 from .models import AttnGCN, AttnMDN, GCN, SimpleNN, mdn_gamma_loss
-from .data import MyOwnDataset, MyOwnDataset22Class, MyOwnDataset10Class, MyOwnDataset10ClassCont
+from .data import MyOwnDataset
