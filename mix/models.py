@@ -5,35 +5,54 @@ from torch.nn import Linear, BatchNorm1d
 from torch_geometric.nn import GCNConv
 
 
+import torch
+from torch.nn import Linear
+from torch_geometric.nn import GATConv
+
+
 class AttnGCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         torch.manual_seed(1234)
-        self.norm = BatchNorm1d(30)
-        self.conv1 = GATConv(in_channels=30,
-                             out_channels=10,
+        self.norm = BatchNorm1d(20)
+        self.conv1 = GATConv(in_channels=20,
+                             out_channels=20,
                              heads=2,
-                             concat=False,
                              add_self_loops=True,
                              edge_dim=1)
-        self.fc1 = Linear(20, 10)
-        self.fc2 = Linear(10, 10)
+        # self.conv2 = GATConv(in_channels=66,
+        #                      out_channels=66,
+        #                      heads=1,
+        #                      add_self_loops=False,
+        #                      edge_dim=1)
+        # self.conv3 = GATConv(in_channels=66,
+        #                      out_channels=66,
+        #                      heads=1,
+        #                      add_self_loops=False,
+        #                      edge_dim=1)
+        self.fc1 = Linear(40, 40)
+        self.fc2 = Linear(40, 10)
         self.fc3 = Linear(10, 10)
-        self.fc4 = Linear(10, 1)
+        #self.fc4 = Linear(10, 10)
+        #self.fc5 = Linear(10, 10)
 
     def forward(self, h, edge_index, edge_weight):
         h = self.norm(h)
         h = self.conv1(h, edge_index, edge_weight)
         h = h.relu()
+        # h = self.conv2(h, edge_index, edge_weight)
+        # h = h.relu()
+        # h = self.conv3(h, edge_index, edge_weight)
+        # h = h.relu()
         h = self.fc1(h)
         h = h.relu()
         h = self.fc2(h)
         h = h.relu()
         h = self.fc3(h)
-        h = h.relu()
-        h = self.fc4(h)
-        h = h.relu()
-        h = h.squeeze(1)
+#         h = h.relu()
+#         h = self.fc4(h)
+#         h = h.relu()
+#         h = self.fc5(h)
         return h
 
 

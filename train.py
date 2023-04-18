@@ -46,18 +46,18 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    # criterion = torch.nn.CrossEntropyLoss()
-    criterion = torch.nn.MSELoss()
+    criterion = torch.nn.CrossEntropyLoss()
+    # criterion = torch.nn.MSELoss()
     # criterion = FocalLoss(
     #    weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
     # criterion = mdn_gamma_loss
 
-    train_dataset = MyOwnDataset10ClassCont(root="train_data_10_class_cont/")
+    train_dataset = MyOwnDataset10ClassCont(root="train_data_10_class/")
     train_data = train_dataset.get(0).to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    t = trange(3000, leave=True)
+    t = trange(4000, leave=True)
     losses = []
     for epoch in t:
         loss = train(epoch)
@@ -65,4 +65,4 @@ if __name__ == '__main__':
         t.set_description(str(round(loss.item(), 6)))
         experiment.log_metric("loss", loss, epoch=epoch)
 
-    torch.save(model, "gcn.pt")
+    torch.save(model, "attn.pt")
