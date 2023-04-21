@@ -14,7 +14,7 @@ def train(epoch):
     model.train()
     optimizer.zero_grad()  # Clear gradients.
     out = model(train_data.x, train_data.edge_index, train_data.edge_attr)  # Perform a single forward pass.
-    loss = criterion(out, train_data.y) + 0.1 * custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
+    loss = criterion(out, train_data.y) + custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
     loss.backward()  # Derive gradients.
     optimizer.step()  # Update parameters based on gradients.
     return loss
@@ -40,10 +40,10 @@ def custom_loss(embeddings, edge_index, edge_weights, labels):
     same_class_mask = (labels[src] == labels[dest])
     diff_class_mask = ~same_class_mask
 
-    same_class_loss = - torch.mean(edge_weights[same_class_mask] * embeddings_dot[same_class_mask])
-    diff_class_loss = torch.mean(edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask])
+    same_class_loss = torch.sigmoid(edge_weights[same_class_mask] * embeddings_dot[same_class_mask])
+    diff_class_loss = torch.sigmoid(edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask])
 
-    loss = same_class_loss + diff_class_loss
+    loss = - torch.mean(same_class_loss) + torch.mean(diff_class_loss)
 
     return loss
 
