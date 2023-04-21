@@ -14,7 +14,7 @@ def train(epoch):
     model.train()
     optimizer.zero_grad()  # Clear gradients.
     out = model(train_data.x, train_data.edge_index, train_data.edge_attr)  # Perform a single forward pass.
-    loss = custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
+    loss = criterion(out, train_data.y) + 0.1 * custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
     loss.backward()  # Derive gradients.
     optimizer.step()  # Update parameters based on gradients.
     return loss
@@ -35,13 +35,10 @@ class FocalLoss(torch.nn.modules.loss._WeightedLoss):
 
 def custom_loss(embeddings, edge_index, edge_weights, labels):
     src, dest = edge_index
-    embeddings_dot = torch.sum(embeddings[src] * embeddings[dest], dim=-1)
+    embeddings_dot = torch.sum(embeddings[src] * embeddings[dest], dim=-1).unsqueeze(1)
 
     same_class_mask = (labels[src] == labels[dest])
     diff_class_mask = ~same_class_mask
-
-    print(edge_weights[same_class_mask].shape)
-    print(embeddings_dot[same_class_mask].shape)
 
     same_class_loss = - torch.mean(edge_weights[same_class_mask] * embeddings_dot[same_class_mask])
     diff_class_loss = torch.mean(edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask])
@@ -74,7 +71,7 @@ if __name__ == '__main__':
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    t = trange(4000, leave=True)
+    t = trange(100000, leave=True)
     losses = []
     for epoch in t:
         loss = train(epoch)
