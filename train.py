@@ -14,7 +14,7 @@ def train(epoch):
     model.train()
     optimizer.zero_grad()  # Clear gradients.
     out = model(train_data.x, train_data.edge_index, train_data.edge_attr)  # Perform a single forward pass.
-    loss = criterion(out, train_data.y)  # Compute the loss solely based on the training nodes.
+    loss = custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
     loss.backward()  # Derive gradients.
     optimizer.step()  # Update parameters based on gradients.
     return loss
@@ -32,6 +32,20 @@ class FocalLoss(torch.nn.modules.loss._WeightedLoss):
         focal_loss = ((1 - pt) ** self.gamma * ce_loss).mean()
         return focal_loss
 
+
+def custom_loss(embeddings, edge_index, edge_weights, labels):
+    src, dest = edge_index
+    embeddings_dot = torch.sum(embeddings[src] * embeddings[dest], dim=-1)
+
+    same_class_mask = (labels[src] == labels[dest])
+    diff_class_mask = ~same_class_mask
+
+    same_class_loss = - edge_weights[same_class_mask] * embeddings_dot[same_class_mask]
+    diff_class_loss = edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask]
+
+    loss = torch.mean(same_class_loss) + torch.mean(diff_class_loss)
+
+    return loss
 
 if __name__ == '__main__':
 
