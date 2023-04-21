@@ -40,6 +40,9 @@ def custom_loss(embeddings, edge_index, edge_weights, labels):
     same_class_mask = (labels[src] == labels[dest])
     diff_class_mask = ~same_class_mask
 
+    print(edge_weights[same_class_mask].shape)
+    print(embeddings_dot[same_class_mask].shape)
+
     same_class_loss = - torch.mean(edge_weights[same_class_mask] * embeddings_dot[same_class_mask])
     diff_class_loss = torch.mean(edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask])
 
