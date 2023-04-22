@@ -13,8 +13,8 @@ from tqdm import trange
 def train(epoch):
     model.train()
     optimizer.zero_grad()  # Clear gradients.
-    out = model(train_data.x, train_data.edge_index, train_data.edge_attr)  # Perform a single forward pass.
-    loss = criterion(out, train_data.y) + custom_loss(out, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
+    embeddings, out = model(train_data.x, train_data.edge_index, train_data.edge_attr)  # Perform a single forward pass.
+    loss = criterion(out, train_data.y) + custom_loss(embeddings, train_data.edge_index, train_data.edge_attr, train_data.y)  # Compute the loss solely based on the training nodes.
     loss.backward()  # Derive gradients.
     optimizer.step()  # Update parameters based on gradients.
     return loss

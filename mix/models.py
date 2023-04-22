@@ -16,22 +16,22 @@ class AttnGCN(torch.nn.Module):
         torch.manual_seed(1234)
         self.norm = BatchNorm1d(20)
         self.conv1 = GATConv(in_channels=20,
-                             out_channels=20,
-                             heads=2,
+                             out_channels=10,
+                             heads=1,
                              add_self_loops=True,
                              edge_dim=1)
-        # self.conv2 = GATConv(in_channels=66,
-        #                      out_channels=66,
-        #                      heads=1,
-        #                      add_self_loops=False,
-        #                      edge_dim=1)
+        self.conv2 = GATConv(in_channels=10,
+                             out_channels=10,
+                             heads=1,
+                             add_self_loops=True,
+                             edge_dim=1)
         # self.conv3 = GATConv(in_channels=66,
         #                      out_channels=66,
         #                      heads=1,
         #                      add_self_loops=False,
         #                      edge_dim=1)
-        self.fc1 = Linear(40, 40)
-        self.fc2 = Linear(40, 10)
+        self.fc1 = Linear(10, 10)
+        self.fc2 = Linear(10, 10)
         self.fc3 = Linear(10, 10)
         #self.fc4 = Linear(10, 10)
         #self.fc5 = Linear(10, 10)
@@ -39,9 +39,9 @@ class AttnGCN(torch.nn.Module):
     def forward(self, h, edge_index, edge_weight):
         h = self.norm(h)
         h = self.conv1(h, edge_index, edge_weight)
+        embeddings = h.relu()
+        h = self.conv2(embeddings, edge_index, edge_weight)
         h = h.relu()
-        # h = self.conv2(h, edge_index, edge_weight)
-        # h = h.relu()
         # h = self.conv3(h, edge_index, edge_weight)
         # h = h.relu()
         h = self.fc1(h)
@@ -53,7 +53,7 @@ class AttnGCN(torch.nn.Module):
 #         h = self.fc4(h)
 #         h = h.relu()
 #         h = self.fc5(h)
-        return h
+        return embeddings, h
 
 
 class SimpleNN(torch.nn.Module):
