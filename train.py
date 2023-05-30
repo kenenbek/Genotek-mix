@@ -20,32 +20,6 @@ def train(epoch):
     return loss
 
 
-class FocalLoss(torch.nn.modules.loss._WeightedLoss):
-    def __init__(self, weight=None, gamma=2, reduction='mean'):
-        super(FocalLoss, self).__init__(weight, reduction=reduction)
-        self.gamma = gamma
-        self.weight = weight  # weight parameter will act as the alpha parameter to balance class weights
-
-    def forward(self, input, target):
-        ce_loss = torch.nn.functional.cross_entropy(input, target, reduction=self.reduction, weight=self.weight)
-        pt = torch.exp(-ce_loss)
-        focal_loss = ((1 - pt) ** self.gamma * ce_loss).mean()
-        return focal_loss
-
-
-def custom_loss(embeddings, edge_index, edge_weights, labels):
-    src, dest = edge_index
-    embeddings_dot = torch.sum(embeddings[src] * embeddings[dest], dim=-1).unsqueeze(1)
-
-    same_class_mask = (labels[src] == labels[dest])
-    diff_class_mask = ~same_class_mask
-
-    same_class_loss = torch.sigmoid(edge_weights[same_class_mask] * embeddings_dot[same_class_mask])
-    diff_class_loss = torch.sigmoid(edge_weights[diff_class_mask] * embeddings_dot[diff_class_mask])
-
-    loss = - torch.mean(same_class_loss) + torch.mean(diff_class_loss)
-
-    return loss
 
 if __name__ == '__main__':
 
@@ -60,21 +34,23 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    criterion = torch.nn.CrossEntropyLoss()
-    # criterion = torch.nn.MSELoss()
-    # criterion = FocalLoss(
-    #    weight=1. / torch.tensor([3449, 1021, 1001,  469,  189,  826,   73,   69,   67,  546], dtype=torch.float).to(device))
-    # criterion = mdn_gamma_loss
-
-    train_dataset = MyOwnDataset(root="train_data_10_class/")
-    train_data = train_dataset.get(0).to(device)
+    train_data = torch.load('Raw/train_data.pt', map_location=torch.device('cpu')).to(device)
+    weight = 1000 / torch.unique(train_data.y, return_counts=True)[1].type(torch.float).to(device)
+    criterion = torch.nn.CrossEntropyLoss(weight=weight)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=5e-4)
 
-    t = trange(10000, leave=True)
+    t = trange(6000, leave=True)
     losses = []
+
     for epoch in t:
-        loss = train(epoch)
+        model.train()
+        optimizer.zero_grad()
+        out = model(train_data.x, train_data.edge_index)
+        loss = criterion(out, train_data.y)
+        loss.backward()
+        optimizer.step()
+
         losses.append(loss)
         t.set_description(str(round(loss.item(), 6)))
         experiment.log_metric("loss", loss, epoch=epoch)
