@@ -18,9 +18,9 @@ class AttnGCN(torch.nn.Module):
         self.conv1 = GATConv(in_channels=2,
                              out_channels=32,
                              heads=2)
-        self.conv2 = GATConv(in_channels=64,
-                             out_channels=32,
-                             heads=2)
+        # self.conv2 = GATConv(in_channels=64,
+        #                      out_channels=32,
+        #                      heads=2)
 #         self.conv3 = GATConv(in_channels=4,
 #                              out_channels=4,
 #                              heads=1,
@@ -34,8 +34,6 @@ class AttnGCN(torch.nn.Module):
     def forward(self, h, edge_index):
         h = self.norm(h)
         h = self.conv1(h, edge_index)
-        h = h.relu()
-        h = self.conv2(h, edge_index)
         h = h.relu()
         h = self.fc1(h)
         h = h.relu()
