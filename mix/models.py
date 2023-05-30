@@ -16,20 +16,20 @@ class AttnGCN(torch.nn.Module):
         torch.manual_seed(1234)
         self.norm = BatchNorm1d(11)
         self.conv1 = GATConv(in_channels=11,
-                             out_channels=128,
+                             out_channels=64,
                              heads=2)
-        self.conv2 = GATConv(in_channels=256,
-                             out_channels=128,
+        self.conv2 = GATConv(in_channels=128,
+                             out_channels=64,
                              heads=2)
 #         self.conv3 = GATConv(in_channels=4,
 #                              out_channels=4,
 #                              heads=1,
 #                              edge_dim=1)
-        self.fc1 = Linear(256, 256)
-        self.fc2 = Linear(256, 256)
-        self.fc3 = Linear(256, 256)
-        self.fc4 = Linear(256, 256)
-        self.fc5 = Linear(256, 11)
+        self.fc1 = Linear(128, 128)
+        self.fc2 = Linear(128, 128)
+        self.fc3 = Linear(128, 128)
+        self.fc4 = Linear(128, 128)
+        self.fc5 = Linear(128, 11)
 
     def forward(self, h, edge_index):
         h = self.norm(h)
