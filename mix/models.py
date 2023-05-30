@@ -32,7 +32,7 @@ class AttnGCN(torch.nn.Module):
         self.fc5 = Linear(128, 11)
 
     def forward(self, h, edge_index):
-        h = self.norm(h)
+        # h = self.norm(h)
         h = self.conv1(h, edge_index)
         h = h.relu()
         h = self.fc1(h)
