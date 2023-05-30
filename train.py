@@ -46,7 +46,7 @@ if __name__ == '__main__':
     for epoch in t:
         model.train()
         optimizer.zero_grad()
-        out = model(train_data.x, train_data.edge_index)
+        out = model(train_data.x[:, ::2], train_data.edge_index)
         loss = criterion(out, train_data.y)
         loss.backward()
         optimizer.step()
