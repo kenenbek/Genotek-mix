@@ -34,7 +34,7 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    train_data = torch.load('Raw/train_data_pure.pt', map_location=torch.device('cpu')).to(device)
+    train_data = torch.load('Raw/train_data.pt', map_location=torch.device('cpu')).to(device)
     weight = 1000 / torch.unique(train_data.y, return_counts=True)[1].type(torch.float).to(device)
     criterion = torch.nn.CrossEntropyLoss(weight=weight)
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     for epoch in t:
         model.train()
         optimizer.zero_grad()
-        out = model(train_data.x[:, ::2], train_data.edge_index)
+        out = model(train_data.x, train_data.edge_index)
         loss = criterion(out, train_data.y)
         loss.backward()
         optimizer.step()
