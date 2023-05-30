@@ -14,8 +14,8 @@ class AttnGCN(torch.nn.Module):
     def __init__(self):
         super().__init__()
         torch.manual_seed(1234)
-        self.norm = BatchNorm1d(11)
-        self.conv1 = GATConv(in_channels=11,
+        self.norm = BatchNorm1d(2)
+        self.conv1 = GATConv(in_channels=2,
                              out_channels=32,
                              heads=2)
         self.conv2 = GATConv(in_channels=64,

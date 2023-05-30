@@ -34,7 +34,7 @@ if __name__ == '__main__':
         device = torch.device('cpu')
 
     model = AttnGCN().to(device)
-    train_data = torch.load('Raw/train_data.pt', map_location=torch.device('cpu')).to(device)
+    train_data = torch.load('Raw/train_data_pure.pt', map_location=torch.device('cpu')).to(device)
     weight = 1000 / torch.unique(train_data.y, return_counts=True)[1].type(torch.float).to(device)
     criterion = torch.nn.CrossEntropyLoss(weight=weight)
 
