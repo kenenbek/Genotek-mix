@@ -30,10 +30,10 @@ def in_between_loss(z, y, proportions):
 
     # Compute the projection of each mixed representation onto the line from A to B,
     # as a fraction of the length of the line from A to B
-    projection = ((mixed_z - A).dot(B - A) / (B - A).dot(B - A))
+    projection = ((mixed_z - A).matmul(B - A) / (B - A).dot(B - A))
 
     # Compute the absolute difference between the projection and the mixture proportion
-    dist_loss = (projection - proportions).abs().mean()
+    dist_loss = (projection - proportions[mixed_mask]).abs().mean()
 
     return dist_loss
 
