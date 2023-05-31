@@ -63,7 +63,7 @@ if __name__ == '__main__':
         model.train()
         optimizer.zero_grad()
         z, out = model(train_data.x, train_data.edge_index)
-        loss = criterion(out, train_data.y) + in_between_loss(z, out, train_data.y_floats)
+        loss = criterion(out, train_data.y) + in_between_loss(z, train_data.y, train_data.y_floats)
         loss.backward()
         optimizer.step()
 
