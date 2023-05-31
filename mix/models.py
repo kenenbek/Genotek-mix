@@ -38,15 +38,15 @@ class AttnGCN(torch.nn.Module):
         h = self.fc1(h)
         h = h.relu()
         h = self.fc2(h)
-        h = h.relu()
-        h = self.fc3(h)
+        z = h.relu()
+        h = self.fc3(z)
         h = h.relu()
         h = self.fc4(h)
         h = h.relu()
         h = self.fc5(h)
         #h = h.relu()
         #h = h.squeeze(1) # MSELoss
-        return h
+        return z, h
 
 
 class SimpleNN(torch.nn.Module):

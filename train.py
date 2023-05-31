@@ -20,6 +20,22 @@ def train(epoch):
     return loss
 
 
+def in_between_loss(z, y, proportions):
+    # z is hidden states
+    # Compute the "in-betweenness" loss for mixed objects
+    mixed_mask = (y > 0) & (y < 10)
+    mixed_z = z[mixed_mask]
+    A = z[y == 0].mean(dim=0)  # class 0 objects
+    B = z[y == 10].mean(dim=0)  # class 10 objects
+
+    # Compute the projection of each mixed representation onto the line from A to B,
+    # as a fraction of the length of the line from A to B
+    projection = ((mixed_z - A).dot(B - A) / (B - A).dot(B - A))
+
+    # Compute the absolute difference between the projection and the mixture proportion
+    dist_loss = (projection - proportions).abs().mean()
+
+    return dist_loss
 
 if __name__ == '__main__':
 
@@ -46,8 +62,8 @@ if __name__ == '__main__':
     for epoch in t:
         model.train()
         optimizer.zero_grad()
-        out = model(train_data.x, train_data.edge_index)
-        loss = criterion(out, train_data.y)
+        z, out = model(train_data.x, train_data.edge_index)
+        loss = criterion(out, train_data.y) + in_between_loss(z, out, train_data.y_floats)
         loss.backward()
         optimizer.step()
 
